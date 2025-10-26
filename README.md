@@ -51,16 +51,16 @@ movie-booking-system/
    Open public/index.html with Live Server or in your browser
 
 📽️ Demo Flow
- 1. Search for a movie using filters
- 2. View detailed information
- 3. Book tickets with showtime, seats, and price
- 4. Confirm booking and view it stored in MongoDB
+ -1. Search for a movie using filters
+ -2. View detailed information
+ -3. Book tickets with showtime, seats, and price
+ -4. Confirm booking and view it stored in MongoDB
 
 🛣️ Roadmap
 Planned features for the final version:
-👤 User login and registration
-🧾 Booking history and cancellation
-🎯 Seat availability logic
-🛠️ Admin dashboard for managing listings
-🎨 UI polish and animations
+-👤 User login and registration
+-🧾 Booking history and cancellation
+-🎯 Seat availability logic
+-🛠️ Admin dashboard for managing listings
+-🎨 UI polish and animations
 
