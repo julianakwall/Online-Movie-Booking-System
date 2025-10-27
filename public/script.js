@@ -35,25 +35,59 @@ function showBookingForm(movie) {
     <select id="showtime">
       ${movie.showtimes.map(time => `<option>${time}</option>`).join('')}
     </select>
+
     <p><strong>Select Seats:</strong></p>
-    <input id="seats" placeholder="e.g. A1,A2">
-    <p><strong>Total Tickets:</strong></p>
+    <div id="seat-layout" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px;">
+      ${generateSeatGrid()}
+    </div>
+
+    <p><strong>Total Price:</strong></p>
     <input id="price" type="number" placeholder="e.g. 20">
+
     <button onclick="submitBooking('${movie._id}')">Confirm Booking</button>
   `;
 }
 
+function generateSeatGrid() {
+  const rows = ['A', 'B', 'C', 'D', 'E'];
+  const seats = [];
+
+  for (let row of rows) {
+    for (let i = 1; i <= 5; i++) {
+      const seatId = `${row}${i}`;
+      seats.push(`<div class="seat" id="${seatId}" onclick="toggleSeat('${seatId}')">${seatId}</div>`);
+    }
+  }
+
+  return seats.join('');
+}
+
+let selectedSeats = [];
+
+function toggleSeat(seatId) {
+  const seat = document.getElementById(seatId);
+  const index = selectedSeats.indexOf(seatId);
+
+  if (index === -1) {
+    selectedSeats.push(seatId);
+    seat.style.backgroundColor = '#4caf50'; // green
+    seat.style.color = 'white';
+  } else {
+    selectedSeats.splice(index, 1);
+    seat.style.backgroundColor = '';
+    seat.style.color = '';
+  }
+}
+
 async function submitBooking(movieId) {
   const showtime = document.getElementById('showtime').value;
-  const seats = document.getElementById('seats').value.split(',');
-  const totalPrice = parseFloat(document.getElementById('price').value);
+  const price = document.getElementById('price').value;
 
   const booking = {
-    userId: "demoUser123", // Replace with actual user ID if you add login later
-    movieId,
+    movie: movieId,
     showtime,
-    seats,
-    totalPrice
+    seats: selectedSeats,
+    price
   };
 
   const res = await fetch('http://localhost:3000/bookings', {
@@ -62,6 +96,9 @@ async function submitBooking(movieId) {
     body: JSON.stringify(booking)
   });
 
-  const result = await res.json();
-  alert(result.message);
+  const data = await res.json();
+  alert('Booking confirmed!');
+  selectedSeats = []; // reset after booking
 }
+
+
