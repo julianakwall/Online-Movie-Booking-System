@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Movie Booking</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="authBar">
+  <a href="login.html" id="loginBtn">Login</a>
+  <a href="register.html" id="registerBtn">Register</a>
+  <a href="profile.html" id="profileBtn" style="display:none;">Profile</a>
+  <button id="logoutBtn" style="display:none;" onclick="logout()">Logout</button>
+</div>
+
+<script>
+const user = JSON.parse(localStorage.getItem("user"));
+
+if (user) {
+  document.getElementById("loginBtn").style.display = "none";
+  document.getElementById("registerBtn").style.display = "none";
+  document.getElementById("profileBtn").style.display = "inline";
+  document.getElementById("logoutBtn").style.display = "inline";
+}
+
+function logout() {
+  localStorage.removeItem("user");
+  window.location.reload();
+}
+</script>
+
+  <h1>🎬 Search Movies</h1>
+  <input id="title" placeholder="Title">
+  <select id="genre">
+    <option value="">All Genres</option>
+    <option>Sci-Fi</option>
+    <option>Romance</option>
+    <option>Drama</option>
+  </select>
+  <input id="date" type="date">
+  <input id="location" placeholder="Location">
+  <button onclick="searchMovies()">Search</button>
+  <div id="results"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
