@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #f8c1d8;
+            margin-top: 40px;
+        }
+
+        h1 {
+            color: #d63384;
+            text-align: center;
+        }
+
+        .card {
+            background: #ffe6f0;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #f5b5cf;
+            margin-bottom: 20px;
+        }
+
+        .btn-home {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #d63384;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .btn-home:hover {
+            background-color: #c2185b;
+        }
+
+        .ticket-number {
+            font-weight: bold;
+            color: #d63384;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Booking Confirmed!</h1>
+
+        <div class="card">
+            <h2>Your Ticket Details</h2>
+            <p><strong>Movie:</strong> <span id="movieTitle"></span></p>
+            <p><strong>Showtime:</strong> <span id="showtime"></span></p>
+            <p><strong>Seats:</strong> <span id="seats"></span></p>
+            <p><strong>Total Paid:</strong> $<span id="price"></span></p>
+            <p><strong>Transaction ID:</strong> <span class="ticket-number" id="transactionId"></span></p>
+        </div>
+
+        <a href="index.html" class="btn-home">Return to Home</a>
+    </div>
+
+    <script>
+        // Load booking info from localStorage
+        document.getElementById("movieTitle").innerText = localStorage.getItem("movieTitle");
+        document.getElementById("showtime").innerText = localStorage.getItem("showtime");
+        document.getElementById("seats").innerText = localStorage.getItem("selectedSeats");
+        document.getElementById("price").innerText = localStorage.getItem("totalPrice");
+
+        // Generate a fake transaction ID if not provided
+        let txn = localStorage.getItem("transactionId");
+        if (!txn) {
+            txn = "TXN-" + Math.floor(Math.random() * 1000000000);
+            localStorage.setItem("transactionId", txn);
+        }
+        document.getElementById("transactionId").innerText = txn;
+
+        // Optional: clear booking data after showing confirmation
+        // localStorage.clear();
