@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Your Profile</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>Your Profile</h1>
+
+<div class="container">
+  <h2 id="username"></h2>
+  <h3>Your Bookings</h3>
+
+  <div id="bookings"></div>
+
+  <button onclick="logout()">Logout</button>
+</div>
+
+<script>
+const user = JSON.parse(localStorage.getItem("user"));
+if (!user) window.location.href = "login.html";
+
+document.getElementById("username").innerText = "Welcome, " + user.name;
+
+async function loadBookings() {
+  const res = await fetch(`http://localhost:3000/users/${user.id}/bookings`);
+  const bookings = await res.json();
+
+  document.getElementById("bookings").innerHTML = bookings.map(b => `
+    <div class="card">
+      <p><strong>Movie:</strong> ${b.movie}</p>
+      <p><strong>Showtime:</strong> ${b.showtime}</p>
+      <p><strong>Seats:</strong> ${b.seats.join(", ")}</p>
+      <p><strong>Price:</strong> $${b.price}</p>
+    </div>
+  `).join("");
+}
+
+function logout() {
+  localStorage.removeItem("user");
+  window.location.href = "index.html";
+}
+
+loadBookings();
+</script>
+
+</body>
+</html>
