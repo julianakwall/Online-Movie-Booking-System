@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Extra styling that matches your theme */
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #f8c1d8;
+        }
+
+        h2 {
+            color: #d63384;
+            margin-bottom: 10px;
+        }
+
+        .summary-box, .payment-box {
+            background: #ffe6f0;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #f5b5cf;
+            margin-bottom: 20px;
+        }
+
+        .status {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #d63384;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Payment Information</h1>
+
+        <div class="summary-box">
+            <h2>Your Booking Summary</h2>
+            <p id="summaryText"></p>
+        </div>
+
+        <div class="payment-box">
+            <h2>Enter Payment Details</h2>
+
+            <form id="paymentForm">
+                <label>Cardholder Name</label>
+                <input type="text" id="cardName" required>
+
+                <label>Card Number</label>
+                <input type="text" id="cardNumber" maxlength="16" required>
+
+                <label>Expiration Date</label>
+                <input type="month" id="expDate" required>
+
+                <label>CVV</label>
+                <input type="text" id="cvv" maxlength="4" required>
+
+                <button type="submit">Pay Now</button>
+            </form>
+
+            <p id="paymentStatus" class="status"></p>
+        </div>
+    </div>
+
+    <script>
+        // Load booking summary
+        document.getElementById("summaryText").innerText =
+            "Movie: " + localStorage.getItem("movieTitle") +
+            "\nShowtime: " + localStorage.getItem("showtime") +
+            "\nSeats: " + localStorage.getItem("selectedSeats") +
+            "\nTotal Price: $" + localStorage.getItem("totalPrice");
+
+        // Handle payment submission
+        document.getElementById("paymentForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const paymentData = {
+                cardName: document.getElementById("cardName").value,
+                cardNumber: document.getElementById("cardNumber").value,
+                expDate: document.getElementById("expDate").value,
+                cvv: document.getElementById("cvv").value,
+                bookingId: localStorage.getItem("bookingId"),
+                amount: localStorage.getItem("totalPrice")
+            };
+
+            const res = await fetch("http://localhost:3000/payments/process", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(paymentData)
+            });
+
+            const data = await res.json();
+            document.getElementById("paymentStatus").innerText = data.message;
+
+            if (data.success) {
+                window.location.href = "confirmation.html";
+            }
+        });
+    </script>
+
+</body>
+</html>
